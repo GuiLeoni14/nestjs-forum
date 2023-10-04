@@ -14,6 +14,7 @@ type GetQuestionBySlugUseCaseResponse = Either<
     question: Question
   }
 >
+
 @Injectable()
 export class GetQuestionBySlugUseCase {
   constructor(private questionsRepository: QuestionsRepository) {}
