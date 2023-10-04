@@ -1,10 +1,13 @@
 import { faker } from '@faker-js/faker'
+
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import {
   Question,
   QuestionProps,
 } from '@/domain/forum/enterprise/entities/question'
-import { Slug } from '@/domain/forum/enterprise/entities/value-objects/slug'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
+import { PrismaQuestionMapper } from '@/infra/database/prisma/mappers/prisma-question-mapper'
+import { Injectable } from '@nestjs/common'
 
 export function makeQuestion(
   override: Partial<QuestionProps> = {},
@@ -12,9 +15,8 @@ export function makeQuestion(
 ) {
   const question = Question.create(
     {
-      slug: Slug.create('nova-pergunta'),
-      title: faker.lorem.sentence(),
       authorId: new UniqueEntityID(),
+      title: faker.lorem.sentence(),
       content: faker.lorem.text(),
       ...override,
     },
@@ -22,4 +24,21 @@ export function makeQuestion(
   )
 
   return question
+}
+
+@Injectable()
+export class QuestionFactory {
+  constructor(private prisma: PrismaService) {}
+
+  async makePrismaQuestion(
+    data: Partial<QuestionProps> = {},
+  ): Promise<Question> {
+    const question = makeQuestion(data)
+
+    await this.prisma.question.create({
+      data: PrismaQuestionMapper.toPrisma(question),
+    })
+
+    return question
+  }
 }
