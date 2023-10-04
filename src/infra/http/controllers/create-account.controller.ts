@@ -40,6 +40,7 @@ export class CreateAccountController {
 
     if (result.isLeft()) {
       const error = result.value
+
       switch (error.constructor) {
         case StudentAlreadyExistsError:
           throw new ConflictException(error.message)

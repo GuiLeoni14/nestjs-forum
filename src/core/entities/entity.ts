@@ -13,7 +13,6 @@ export abstract class Entity<Props> {
     this._id = id ?? new UniqueEntityID()
   }
 
-  // eslint-disable-next-line
   public equals(entity: Entity<unknown>) {
     if (entity === this) {
       return true
