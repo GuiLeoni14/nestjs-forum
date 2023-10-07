@@ -8,6 +8,7 @@ export default defineConfig({
     globals: true,
     root: './',
     setupFiles: ['./test/setup-e2e.ts'],
+    testTimeout: 50000, // tebi upload time out, verificar se realmente precisa
   },
   plugins: [
     tsConfigPaths(),
